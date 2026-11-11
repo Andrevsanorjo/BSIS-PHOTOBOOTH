@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#641c32">
+<title>BSIS Photo Booth</title>
+<style>
+:root{--maroon:#641c32;--burgundy:#842c45;--cream:#fff9f4;--gold:#d6b36a;--ink:#292329;--muted:#786d70;--line:#eadfe1;--white:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{background:linear-gradient(120deg,#4d1428,var(--maroon),#842c45);color:white;padding:18px clamp(16px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:16px;box-shadow:0 5px 24px #3d10251f}
+.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:44px;height:44px;border:1px solid #ffffff66;border-radius:13px;display:grid;place-items:center;font-size:23px;background:#ffffff12}
+.brand h1{font-size:17px;letter-spacing:.08em;margin:0}.brand p{font-size:11px;margin:3px 0 0;color:#f1dfe4;letter-spacing:.12em}
+.header-tag{font-size:12px;color:#f4e8eb;border:1px solid #ffffff44;border-radius:999px;padding:8px 12px}
+main{max-width:1180px;margin:auto;padding:clamp(18px,4vw,42px) 16px 60px}
+.hero{text-align:center;margin:4px auto 28px;max-width:720px}.eyebrow{color:var(--burgundy);font-size:11px;letter-spacing:.2em;font-weight:800}.hero h2{font-size:clamp(28px,5vw,44px);line-height:1.08;margin:10px 0;color:var(--maroon)}.hero p{color:var(--muted);line-height:1.6;margin:0}
+.steps{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:22px 0 28px}.step{font-size:12px;padding:8px 13px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:white}.step.active{background:var(--maroon);color:white;border-color:var(--maroon)}
+.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:20px;align-items:start}
+.panel{background:white;border:1px solid var(--line);border-radius:20px;padding:clamp(14px,2.5vw,24px);box-shadow:0 10px 35px #4516280b}
+.panel h3{margin:0 0 14px;color:var(--maroon);font-size:17px}
+.camera-wrap{position:relative;background:#1b1719;border-radius:15px;overflow:hidden;aspect-ratio:4/3;display:grid;place-items:center}
+video{width:100%;height:100%;object-fit:cover;display:block;transform:scaleX(-1)}
+.camera-placeholder{color:#f5e9ed;text-align:center;padding:20px}.camera-placeholder .cam-icon{font-size:42px;margin-bottom:8px}
+.camera-status{font-size:12px;color:var(--muted);margin:10px 0 0;min-height:18px}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700;font-size:13px;transition:.18s;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.btn:disabled{opacity:.45;cursor:not-allowed}.primary{background:var(--maroon);color:white}.primary:hover:not(:disabled){background:#4d1428;transform:translateY(-1px)}.secondary{background:#f5eaed;color:var(--maroon);border:1px solid #ead8de}.light{background:white;color:var(--ink);border:1px solid var(--line)}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}.field label{font-size:12px;font-weight:750;color:#57474d}.field select,.field input{border:1px solid var(--line);background:white;border-radius:10px;padding:10px 11px;color:var(--ink);width:100%;min-width:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}.shot{aspect-ratio:1;background:#f5eef0;border:1px dashed #d9c6cd;border-radius:10px;overflow:hidden;position:relative}.shot img{width:100%;height:100%;object-fit:cover}.shot span{position:absolute;left:6px;top:5px;background:#32131fe0;color:white;font-size:10px;border-radius:5px;padding:3px 5px}
+.preview-area{background:#f7f0f1;border-radius:15px;padding:15px;display:grid;place-items:center;min-height:270px}
+#stripPreview{display:block;max-width:min(100%,230px);height:auto;box-shadow:0 8px 24px #39132124;background:white}
+.preview-note{font-size:11px;color:var(--muted);text-align:center;margin:10px 0 0}
+.gallery-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.notice{font-size:12px;line-height:1.55;background:#fff8e9;border:1px solid #f0dfb8;border-radius:11px;padding:11px;color:#68522a;margin-top:14px}
+.hidden{display:none!important}
+footer{text-align:center;color:#94878b;font-size:11px;padding:0 16px 25px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.header-tag{display:none}.preview-area{min-height:220px}}
+@media(max-width:420px){.shots{grid-template-columns:repeat(2,1fr)}.controls .btn{flex:1}.grid2{grid-template-columns:1fr}.hero{margin-bottom:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="brand-mark">✦</div><div><h1>BSIS PHOTOBOOTH</h1><p>CAPTURE • CREATE • KEEP</p></div></div>
+  <div class="header-tag">MAROON EDITION</div>
+</header>
+<main>
+  <section class="hero">
+    <div class="eyebrow">BACHELOR OF SCIENCE IN INFORMATION SYSTEMS</div>
+    <h2>Make the moment<br>memorable.</h2>
+    <p>Take your photos, choose a layout, and create your own BSIS photo strip.</p>
+  </section>
+  <nav class="steps" aria-label="Photo booth steps">
+    <span class="step active" id="s1">01 · Camera</span><span class="step" id="s2">02 · Capture</span><span class="step" id="s3">03 · Customize</span><span class="step" id="s4">04 · Download</span>
+  </nav>
+  <div class="layout">
+    <section class="panel">
+      <h3>Camera studio</h3>
+      <div class="camera-wrap">
+        <video id="video" autoplay playsinline muted class="hidden"></video>
+        <div class="camera-placeholder" id="cameraPlaceholder"><div class="cam-icon">📷</div><strong>Your camera preview appears here</strong><div style="font-size:12px;margin-top:6px;color:#cbbbc0">Allow camera access when your browser asks.</div></div>
+        <div id="countdown" class="hidden" style="position:absolute;color:white;font-size:clamp(64px,14vw,110px);font-weight:900;text-shadow:0 3px 22px #000;z-index:2"></div>
+      </div>
+      <div class="camera-status" id="cameraStatus" role="status">Camera is not connected.</div>
+      <div class="controls">
+        <button class="btn primary" id="startCamera">◎ Start camera</button>
+        <button class="btn secondary" id="switchCamera" disabled>⇄ Switch camera</button>
+        <button class="btn light" id="capture" disabled>✦ Start capture</button>
+      </div>
+      <div class="shots" id="shots">
+        <div class="shot"><span>PHOTO 1</span></div><div class="shot"><span>PHOTO 2</span></div><div class="shot"><span>PHOTO 3</span></div><div class="shot"><span>PHOTO 4</span></div>
+      </div>
+      <div class="controls"><button class="btn secondary" id="retake" disabled>↻ Retake all</button><button class="btn light" id="clear" disabled>Clear photos</button></div>
+      <div class="notice">Camera access works on HTTPS or localhost. If the camera does not start, allow camera permission in your browser and reload this page.</div>
+    </section>
+    <aside class="panel">
+      <h3>Strip designer</h3>
+      <div class="field"><label for="template">Photo strip layout</label><select id="template"><option value="classic3">Classic · 3 photos (600 × 1800)</option><option value="classic4">Classic · 4 photos (600 × 2200)</option><option value="square">Square collage (1200 × 1200)</option><option value="twocol">Two-column (1200 × 1800)</option></select></div>
+      <div class="grid2">
+        <div class="field"><label for="background">Background</label><select id="background"><option value="#641c32">BSIS Maroon</option><option value="#fff9f4">Warm Cream</option><option value="#ffffff">White</option><option value="#842c45">Burgundy</option><option value="#292329">Charcoal</option></select></div>
+        <div class="field"><label for="filter">Photo filter</label><select id="filter"><option value="none">Natural</option><option value="sepia(0.65)">Vintage</option><option value="grayscale(1)">Black & white</option><option value="brightness(1.12) saturate(1.12)">Warm / bright</option><option value="contrast(1.2) saturate(.85)">Cool contrast</option></select></div>
+      </div>
+      <div class="field"><label for="caption">Strip caption</label><input id="caption" maxlength="36" placeholder="e.g. BSIS DAY 2026" value="BSIS PHOTOBOOTH"></div>
+      <div class="field"><label for="eventDate">Small footer text</label><input id="eventDate" maxlength="50" placeholder="Your event or section"></div>
+      <div class="controls"><button class="btn primary" id="generate">Generate strip</button></div>
+      <h3 style="margin-top:24px">Final preview</h3>
+      <div class="preview-area"><canvas id="stripPreview" width="600" height="1800" aria-label="Generated photo strip preview"></canvas></div>
+      <p class="preview-note" id="dimensions">Export size: 600 × 1800 px · Preview scales to fit your screen</p>
+      <div class="gallery-actions">
+        <button class="btn primary" id="downloadPng" disabled>↓ Download PNG</button>
+        <button class="btn secondary" id="downloadJpg" disabled>↓ Download JPEG</button>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer>BSIS PHOTOBOOTH · Photos are processed in your browser and are not uploaded.</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const video=$('video'), placeholder=$('cameraPlaceholder'), status=$('cameraStatus');
+  const preview=$('stripPreview'), pctx=preview.getContext('2d');
+  const shots=[], shotEls=[...document.querySelectorAll('.shot')];
+  let stream=null, devices=[], activeDevice=0, generated=false, busy=false;
+  const templates={
+    classic3:{w:600,h:1800,count:3,cols:1,rows:3,pad:34,gap:22,footer:160},
+    classic4:{w:600,h:2200,count:4,cols:1,rows:4,pad:34,gap:20,footer:170},
+    square:{w:1200,h:1200,count:4,cols:2,rows:2,pad:48,gap:24,footer:130},
+    twocol:{w:1200,h:1800,count:4,cols:2,rows:2,pad:48,gap:24,footer:150}
+  };
+  const current=()=>templates[$('template').value];
+  const setStep=n=>{for(let i=1;i<=4;i++)$('s'+i).classList.toggle('active',i<=n)};
+  function setStatus(msg){status.textContent=msg}
+  async function getDevices(){
+    try{devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput')}catch(e){devices=[]}
+    $('switchCamera').disabled=devices.length<2;
+  }
+  async function startCamera(deviceId){
+    if(!navigator.mediaDevices?.getUserMedia){setStatus('This browser does not support camera access. Try a recent Chrome, Edge, Safari, or Firefox browser.');return}
+    stopCamera();
+    try{
+      stream=await navigator.mediaDevices.getUserMedia({audio:false,video:deviceId?{deviceId:{exact:deviceId},width:{ideal:1920},height:{ideal:1080}}:{facingMode:'user',width:{ideal:1920},height:{ideal:1080}}});
+      video.srcObject=stream; await video.play();
+      video.classList.remove('hidden');placeholder.classList.add('hidden');
+      $('capture').disabled=false;setStatus('Camera ready. Choose your layout, then start capturing.');
+      await getDevices();setStep(1);
+    }catch(err){
+      const msg=err.name==='NotAllowedError'?'Camera permission was denied. Allow access in browser settings and try again.':err.name==='NotFoundError'?'No camera was found on this device.':err.name==='NotReadableError'?'The camera may be in use by another application. Close it and retry.':'Unable to start the camera. Check browser permissions and try again.';
+      setStatus(msg);video.classList.add('hidden');placeholder.classList.remove('hidden');
+    }
+  }
+  function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}video.srcObject=null}
+  $('startCamera').addEventListener('click',()=>startCamera());
+  $('switchCamera').addEventListener('click',async()=>{
+    await getDevices();if(devices.length<2)return;activeDevice=(activeDevice+1)%devices.length;await startCamera(devices[activeDevice].deviceId);
+  });
+  function updateShots(){
+    shotEls.forEach((el,i)=>{el.innerHTML=`<span>PHOTO ${i+1}</span>`;if(shots[i]){const img=document.createElement('img');img.src=shots[i].url;img.alt=`Captured photo ${i+1}`;el.append(img)}});
+    $('retake').disabled=!shots.length;$('clear').disabled=!shots.length;
+  }
+  function clearShots(){shots.forEach(s=>URL.revokeObjectURL(s.url));shots.length=0;updateShots();generated=false;disableDownloads()}
+  function disableDownloads(){$('downloadPng').disabled=true;$('downloadJpg').disabled=true}
+  $('clear').addEventListener('click',()=>{clearShots();setStatus('Photos cleared.')});
+  $('retake').addEventListener('click',()=>{clearShots();setStatus('Ready for a new photo session.');setStep(1)});
+  function captureFrame(){
+    if(!video.videoWidth||!video.videoHeight)throw new Error('Camera is not ready yet.');
+    const c=document.createElement('canvas');c.width=video.videoWidth;c.height=video.videoHeight;
+    const ctx=c.getContext('2d');
+    // Mirror front-camera captures so they match the mirrored preview.
+    const isFront=devices[activeDevice]?.label?.toLowerCase().includes('front')||!devices.length||activeDevice===0;
+    if(isFront){ctx.translate(c.width,0);ctx.scale(-1,1)}
+    ctx.drawImage(video,0,0,c.width,c.height);
+    return new Promise(resolve=>c.toBlob(blob=>resolve(blob),'image/jpeg',.94));
+  }
+  async function countdown(n){
+    const el=$('countdown');el.classList.remove('hidden');
+    for(let i=n;i>0;i--){el.textContent=i;await new Promise(r=>setTimeout(r,850))}
+    el.textContent='✦';await new Promise(r=>setTimeout(r,250));el.classList.add('hidden');
+  }
+  $('capture').addEventListener('click',async()=>{
+    if(busy||!stream)return;busy=true;$('capture').disabled=true;
+    clearShots();const count=current().count;setStep(2);
+    try{
+      for(let i=0;i<count;i++){
+        setStatus(`Get ready for photo ${i+1} of ${count}…`);await countdown(3);
+        const blob=await captureFrame();if(!blob)throw new Error('Could not save this photo. Please try again.');
+        shots.push({blob,url:URL.createObjectURL(blob)});updateShots();
+        if(i<count-1)await new Promise(r=>setTimeout(r,850));
+      }
+      setStatus('All photos captured! Generate your strip when ready.');setStep(3);
+    }catch(e){setStatus(e.message||'Capture failed. Please try again.')}
+    finally{busy=false;$('capture').disabled=!stream}
+  });
+  function loadImage(url){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=url})}
+  function drawCover(ctx,img,x,y,w,h,filter){
+    const scale=Math.max(w/img.width,h/img.height),sw=w/scale,sh=h/scale,sx=(img.width-sw)/2,sy=(img.height-sh)/2;
+    ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.filter=filter||'none';ctx.drawImage(img,sx,sy,sw,sh,x,y,w,h);ctx.restore();
+  }
+  async function makeStrip(){
+    const t=current();if(shots.length<t.count){setStatus(`Capture ${t.count} photos for this layout first.`);return}
+    const c=document.createElement('canvas');c.width=t.w;c.height=t.h;const ctx=c.getContext('2d');
+    const bg=$('background').value, filter=$('filter').value;
+    ctx.fillStyle=bg;ctx.fillRect(0,0,t.w,t.h);
+    const imgs=await Promise.all(shots.slice(0,t.count).map(s=>loadImage(s.url)));
+    const contentH=t.h-t.footer-t.pad*2;
+    const cellW=(t.w-t.pad*2-t.gap*(t.cols-1))/t.cols;
+    const cellH=(contentH-t.gap*(t.rows-1))/t.rows;
+    imgs.forEach((img,i)=>{
+      const col=i%t.cols,row=Math.floor(i/t.cols),x=t.pad+col*(cellW+t.gap),y=t.pad+row*(cellH+t.gap);
+      ctx.fillStyle=bg==='#fff9f4'?'#eadfe1':'#ffffff33';ctx.fillRect(x-5,y-5,cellW+10,cellH+10);
+      drawCover(ctx,img,x,y,cellW,cellH,filter);
+    });
+    const light=bg==='#fff9f4'||bg==='#ffffff';
+    ctx.fillStyle=light?'#641c32':'#fff9f4';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font=`800 ${Math.round(t.w*.035)}px system-ui, sans-serif`;
+    ctx.fillText(($('caption').value||'BSIS PHOTOBOOTH').toUpperCase(),t.w/2,t.h-t.footer*.62,t.w-t.pad*2);
+    ctx.fillStyle=light?'#786d70':'#f0dce2';ctx.font=`500 ${Math.round(t.w*.018)}px system-ui, sans-serif`;
+    if($('eventDate').value.trim())ctx.fillText($('eventDate').value.trim(),t.w/2,t.h-t.footer*.30,t.w-t.pad*2);
+    preview.width=t.w;preview.height=t.h;pctx.clearRect(0,0,t.w,t.h);pctx.drawImage(c,0,0);
+    generatedCanvas=c;generated=true;$('dimensions').textContent=`Export size: ${t.w} × ${t.h} px · Preview scales to fit your screen`;
+    $('downloadPng').disabled=false;$('downloadJpg').disabled=false;setStatus('Your photo strip is ready to download.');setStep(4);
+  }
+  let generatedCanvas=null;
+  $('generate').addEventListener('click',async()=>{try{await makeStrip()}catch(e){setStatus('Could not generate the strip. Please try again. '+e.message)}});
+  function download(type){
+    if(!generatedCanvas)return;
+    generatedCanvas.toBlob(blob=>{
+      if(!blob){setStatus('Export failed. Try downloading again.');return}
+      const url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download=`BSIS-PhotoBooth-${Date.now()}.${type==='image/png'?'png':'jpg'}`;
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    },type,type==='image/jpeg'?.94:undefined);
+  }
+  $('downloadPng').addEventListener('click',()=>download('image/png'));
+  $('downloadJpg').addEventListener('click',()=>download('image/jpeg'));
+  $('template').addEventListener('change',()=>{
+    const t=current();setStatus(`Selected ${t.w} × ${t.h} px template. Capture ${t.count} photos to match this layout.`);
+    clearShots();preview.width=t.w;preview.height=t.h;pctx.fillStyle='#f7f0f1';pctx.fillRect(0,0,t.w,t.h);
+    $('dimensions').textContent=`Export size: ${t.w} × ${t.h} px · Preview scales to fit your screen`;
+  });
+  ['background','filter','caption','eventDate'].forEach(id=>$(id).addEventListener('change',()=>{if(generated)makeStrip().catch(()=>{})}));
+  function initPreview(){const t=current();preview.width=t.w;preview.height=t.h;pctx.fillStyle='#f7f0f1';pctx.fillRect(0,0,t.w,t.h);pctx.fillStyle='#641c32';pctx.textAlign='center';pctx.font='bold 38px system-ui';pctx.fillText('BSIS PHOTOBOOTH',t.w/2,t.h/2)}
+  window.addEventListener('beforeunload',stopCamera);initPreview();updateShots();
+})();
+</script>
+</body>
+</html>
