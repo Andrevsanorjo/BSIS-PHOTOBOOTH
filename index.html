@@ -1,0 +1,1416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#40050B">
+<title>BSIS WEEK Photobooth</title>
+
+<style>
+:root {
+    --maroon: #40050B;
+    --burgundy: #650B18;
+    --red: #8D2638;
+    --cream: #FFF9F4;
+    --gold: #D9B56D;
+    --ink: #241619;
+    --muted: #786D70;
+    --line: #EADFE1;
+    --white: #FFFFFF;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+/* HEADER */
+header {
+    background: linear-gradient(120deg, #250207, #40050B, #650B18);
+    color: white;
+    padding: 18px clamp(16px,4vw,48px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 5px 24px #40050b30;
+    border-bottom: 3px solid var(--gold);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-mark {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #ffffff66;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    background: #ffffff12;
+    color: var(--gold);
+}
+
+.brand h1 {
+    font-size: 17px;
+    letter-spacing: .12em;
+    margin: 0;
+    font-weight: 900;
+}
+
+.brand p {
+    font-size: 11px;
+    margin: 3px 0 0;
+    color: #f1dfe4;
+    letter-spacing: .12em;
+}
+
+.header-tag {
+    font-size: 12px;
+    color: var(--gold);
+    border: 1px solid #d9b56d77;
+    border-radius: 999px;
+    padding: 8px 12px;
+}
+
+/* MAIN */
+main {
+    max-width: 1180px;
+    margin: auto;
+    padding: clamp(18px,4vw,42px) 16px 60px;
+}
+
+.hero {
+    text-align: center;
+    margin: 4px auto 28px;
+    max-width: 720px;
+}
+
+.eyebrow {
+    color: var(--burgundy);
+    font-size: 11px;
+    letter-spacing: .2em;
+    font-weight: 800;
+}
+
+.hero h2 {
+    font-size: clamp(28px,5vw,44px);
+    line-height: 1.08;
+    margin: 10px 0;
+    color: var(--maroon);
+}
+
+.hero p {
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* STEPS */
+.steps {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 22px 0 28px;
+}
+
+.step {
+    font-size: 12px;
+    padding: 8px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    background: white;
+}
+
+.step.active {
+    background: var(--maroon);
+    color: white;
+    border-color: var(--maroon);
+}
+
+/* LAYOUT */
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0,1.25fr) minmax(280px,.75fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.panel {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: clamp(14px,2.5vw,24px);
+    box-shadow: 0 10px 35px #40050b0b;
+}
+
+.panel h3 {
+    margin: 0 0 14px;
+    color: var(--maroon);
+    font-size: 17px;
+}
+
+/* CAMERA */
+.camera-wrap {
+    position: relative;
+    background: #1b1719;
+    border-radius: 15px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    display: grid;
+    place-items: center;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.camera-placeholder {
+    color: #f5e9ed;
+    text-align: center;
+    padding: 20px;
+}
+
+.camera-placeholder .cam-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.camera-status {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 10px 0 0;
+    min-height: 18px;
+}
+
+.controls {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+.btn {
+    border: 0;
+    border-radius: 12px;
+    padding: 11px 15px;
+    font-weight: 700;
+    font-size: 13px;
+    transition: .18s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.primary {
+    background: var(--maroon);
+    color: white;
+}
+
+.primary:hover:not(:disabled) {
+    background: var(--red);
+    transform: translateY(-1px);
+}
+
+.secondary {
+    background: #f5eaed;
+    color: var(--maroon);
+    border: 1px solid #ead8de;
+}
+
+.light {
+    background: white;
+    color: var(--ink);
+    border: 1px solid var(--line);
+}
+
+/* CAPTURED PHOTOS */
+.shots {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.shot {
+    aspect-ratio: 1;
+    background: #f5eef0;
+    border: 1px dashed #d9c6cd;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.shot span {
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    background: #32131fe0;
+    color: white;
+    font-size: 10px;
+    border-radius: 5px;
+    padding: 3px 5px;
+}
+
+/* DESIGNER */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 14px;
+}
+
+.field label {
+    font-size: 12px;
+    font-weight: 750;
+    color: #57474d;
+}
+
+.field select,
+.field input {
+    border: 1px solid var(--line);
+    background: white;
+    border-radius: 10px;
+    padding: 10px 11px;
+    color: var(--ink);
+    width: 100%;
+    min-width: 0;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* PREVIEW */
+.preview-area {
+    background: #f7f0f1;
+    border-radius: 15px;
+    padding: 15px;
+    display: grid;
+    place-items: center;
+    min-height: 270px;
+    overflow: hidden;
+}
+
+#stripPreview {
+    display: block;
+    max-width: min(100%,260px);
+    height: auto;
+    box-shadow: 0 8px 24px #40050B;
+    background: white;
+}
+
+.preview-note {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    margin: 10px 0 0;
+}
+
+.gallery-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.notice {
+    font-size: 12px;
+    line-height: 1.55;
+    background: #fff8e9;
+    border: 1px solid #f0dfb8;
+    border-radius: 11px;
+    padding: 11px;
+    color: #68522a;
+    margin-top: 14px;
+}
+
+.hidden { display: none !important; }
+
+footer {
+    text-align: center;
+    color: #94878b;
+    font-size: 11px;
+    padding: 0 16px 25px;
+}
+
+/* RESPONSIVE */
+@media(max-width:800px) {
+    .layout { grid-template-columns: 1fr; }
+    .header-tag { display: none; }
+    .preview-area { min-height: 220px; }
+}
+
+@media(max-width:420px) {
+    .shots { grid-template-columns: repeat(2,1fr); }
+    .controls .btn { flex: 1; }
+    .grid2 { grid-template-columns: 1fr; }
+    .hero { margin-bottom: 20px; }
+}
+
+/* PRINT */
+@media print {
+    @page {
+        size: 4in 6in;
+        margin: 0;
+    }
+
+    body {
+        width: 4in;
+        height: 6in;
+        margin: 0;
+        padding: 0;
+    }
+
+    body * { visibility: hidden; }
+
+    #stripPreview,
+    #stripPreview * {
+        visibility: visible;
+    }
+
+    #stripPreview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4in;
+        height: 6in;
+        max-width: none;
+        box-shadow: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <div class="brand-mark">✦</div>
+        <div>
+            <h1>BSIS WEEK</h1>
+            <p>CAPTURE • CREATE • CELEBRATE</p>
+        </div>
+    </div>
+    <div class="header-tag">OFFICIAL PHOTOBOOTH</div>
+</header>
+
+<main>
+
+<section class="hero">
+    <div class="eyebrow">BACHELOR OF SCIENCE IN INFORMATION SYSTEMS</div>
+    <h2>BSIS WEEK<br>PHOTO EXPERIENCE.</h2>
+    <p>Capture your memories. Celebrate your moments. Keep your BSIS WEEK memories forever.</p>
+</section>
+
+<nav class="steps" aria-label="Photobooth steps">
+    <span class="step active" id="s1">01 · Camera</span>
+    <span class="step" id="s2">02 · Capture</span>
+    <span class="step" id="s3">03 · Customize</span>
+    <span class="step" id="s4">04 · Download</span>
+</nav>
+
+<div class="layout">
+
+<section class="panel">
+
+    <h3>Camera studio</h3>
+
+    <div class="camera-wrap">
+
+        <video id="video" autoplay playsinline muted class="hidden"></video>
+
+        <div class="camera-placeholder" id="cameraPlaceholder">
+            <div class="cam-icon">📷</div>
+            <strong>Your camera preview appears here</strong>
+            <div style="font-size:12px;margin-top:6px;color:#cbbbc0">
+                Allow camera access when your browser asks.
+            </div>
+        </div>
+
+        <div id="countdown" class="hidden"
+            style="position:absolute;color:white;font-size:clamp(64px,14vw,110px);font-weight:900;text-shadow:0 3px 22px #000;z-index:2">
+        </div>
+
+    </div>
+
+    <div class="camera-status" id="cameraStatus" role="status">
+        Camera is not connected.
+    </div>
+
+    <div class="controls">
+        <button class="btn primary" id="startCamera">◎ Start camera</button>
+        <button class="btn secondary" id="switchCamera" disabled>⇄ Switch camera</button>
+        <button class="btn light" id="capture" disabled>✦ Start capture</button>
+    </div>
+
+    <div class="shots" id="shots"></div>
+
+    <div class="controls">
+        <button class="btn secondary" id="retake" disabled>↻ Retake all</button>
+        <button class="btn light" id="clear" disabled>Clear photos</button>
+    </div>
+
+</section>
+
+<aside class="panel">
+
+    <h3>BSIS WEEK strip designer</h3>
+
+    <div class="field">
+        <label for="template">Photo strip layout</label>
+        <select id="template">
+            <option value="bsisweek">BSIS WEEK · Double strip (6 photos)</option>
+            <option value="classic3">Classic · 3 photos</option>
+            <option value="classic4">Classic · 4 photos</option>
+            <option value="square">Square collage (4 photos)</option>
+            <option value="twocol">Two-column (4 photos)</option>
+        </select>
+    </div>
+
+    <div class="grid2">
+
+        <div class="field">
+            <label for="background">Background</label>
+            <select id="background">
+                <option value="#40050B">BSIS Maroon</option>
+                <option value="#650B18">Burgundy</option>
+                <option value="#FFF9F4">Warm Cream</option>
+                <option value="#FFFFFF">White</option>
+                <option value="#171113">Charcoal</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="filter">Photo filter</label>
+            <select id="filter">
+                <option value="none">Natural</option>
+                <option value="sepia(0.65)">Vintage</option>
+                <option value="grayscale(1)">Black & white</option>
+                <option value="brightness(1.12) saturate(1.12)">Warm / bright</option>
+                <option value="contrast(1.2) saturate(.85)">Cool contrast</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="field">
+        <label for="caption">Main strip caption</label>
+        <input id="caption" maxlength="36" value="BSIS WEEK">
+    </div>
+
+    <div class="field">
+        <label for="eventDate">Footer text</label>
+        <input id="eventDate" maxlength="50" value="BACHELOR OF SCIENCE IN INFORMATION SYSTEMS">
+    </div>
+
+    <div class="controls">
+        <button class="btn primary" id="generate">Generate strip</button>
+    </div>
+
+    <h3 style="margin-top:24px">Final preview</h3>
+
+    <div class="preview-area">
+        <canvas id="stripPreview" width="1200" height="1800"
+            aria-label="Generated BSIS WEEK photo strip preview"></canvas>
+    </div>
+
+    <p class="preview-note" id="dimensions">
+        Export size: 1200 × 1800 px · Preview scales to fit your screen
+    </p>
+
+    <div class="gallery-actions">
+        <button class="btn primary" id="downloadPng" disabled>↓ Download PNG</button>
+        <button class="btn secondary" id="downloadJpg" disabled>↓ Download JPEG</button>
+    </div>
+
+    <div class="notice">
+        Your photos are processed directly in your browser.
+        They are not uploaded to an external server.
+    </div>
+
+</aside>
+</div>
+</main>
+
+<footer>
+    BSIS WEEK PHOTOBOOTH · CAPTURE THE MOMENT
+</footer>
+
+<script>
+(() => {
+
+    const $ = id => document.getElementById(id);
+
+    const video = $('video');
+    const placeholder = $('cameraPlaceholder');
+    const status = $('cameraStatus');
+    const preview = $('stripPreview');
+    const pctx = preview.getContext('2d');
+
+    let shots = [];
+    let stream = null;
+    let devices = [];
+    let activeDevice = 0;
+    let isFrontCamera = true;
+    let generated = false;
+    let generatedCanvas = null;
+    let busy = false;
+
+    const templates = {
+
+        bsisweek: {
+            w: 1200,
+            h: 1800,
+            count: 6,
+            cols: 2,
+            rows: 3,
+            pad: 34,
+            gap: 24,
+            footer: 0
+        },
+
+        classic3: {
+            w: 600,
+            h: 1800,
+            count: 3,
+            cols: 1,
+            rows: 3,
+            pad: 34,
+            gap: 22,
+            footer: 160
+        },
+
+        classic4: {
+            w: 600,
+            h: 2200,
+            count: 4,
+            cols: 1,
+            rows: 4,
+            pad: 34,
+            gap: 20,
+            footer: 170
+        },
+
+        square: {
+            w: 1200,
+            h: 1200,
+            count: 4,
+            cols: 2,
+            rows: 2,
+            pad: 48,
+            gap: 24,
+            footer: 130
+        },
+
+        twocol: {
+            w: 1200,
+            h: 1800,
+            count: 4,
+            cols: 2,
+            rows: 2,
+            pad: 48,
+            gap: 24,
+            footer: 150
+        }
+
+    };
+
+    const current = () => templates[$('template').value];
+
+    function setStatus(message) {
+        status.textContent = message;
+    }
+
+    function setStep(n) {
+        for (let i = 1; i <= 4; i++) {
+            $('s' + i).classList.toggle('active', i <= n);
+        }
+    }
+
+    function disableDownloads() {
+        $('downloadPng').disabled = true;
+        $('downloadJpg').disabled = true;
+    }
+
+    function renderShotSlots() {
+
+        const count = current().count;
+        const container = $('shots');
+
+        container.innerHTML = '';
+
+        for (let i = 0; i < count; i++) {
+
+            const slot = document.createElement('div');
+            slot.className = 'shot';
+
+            const label = document.createElement('span');
+            label.textContent = 'PHOTO ' + (i + 1);
+
+            slot.appendChild(label);
+            container.appendChild(slot);
+
+        }
+
+        updateShots();
+    }
+
+    function updateShots() {
+
+        const slots = [...document.querySelectorAll('.shot')];
+
+        slots.forEach((slot, i) => {
+
+            slot.innerHTML = '';
+
+            const label = document.createElement('span');
+            label.textContent = 'PHOTO ' + (i + 1);
+            slot.appendChild(label);
+
+            if (shots[i]) {
+
+                const img = document.createElement('img');
+                img.src = shots[i].url;
+                img.alt = 'Captured photo ' + (i + 1);
+
+                slot.appendChild(img);
+
+            }
+
+        });
+
+        $('retake').disabled = !shots.length;
+        $('clear').disabled = !shots.length;
+    }
+
+    function clearShots() {
+
+        shots.forEach(s => URL.revokeObjectURL(s.url));
+
+        shots = [];
+
+        updateShots();
+
+        generated = false;
+        generatedCanvas = null;
+
+        disableDownloads();
+    }
+
+    async function getDevices() {
+
+        try {
+
+            devices = (await navigator.mediaDevices.enumerateDevices())
+                .filter(d => d.kind === 'videoinput');
+
+        } catch (e) {
+            devices = [];
+        }
+
+        $('switchCamera').disabled = devices.length < 2;
+    }
+
+    async function startCamera(deviceId) {
+
+        if (!navigator.mediaDevices?.getUserMedia) {
+            setStatus('Camera access is not supported by this browser. Use HTTPS or localhost.');
+            return;
+        }
+
+        stopCamera();
+
+        try {
+
+            const constraints = deviceId
+                ? {
+                    deviceId: { exact: deviceId },
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
+                : {
+                    facingMode: 'user',
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                };
+
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: constraints
+            });
+
+            video.srcObject = stream;
+            await video.play();
+
+            await getDevices();
+
+            const track = stream.getVideoTracks()[0];
+            const settings = track.getSettings();
+
+            isFrontCamera = settings.facingMode
+                ? settings.facingMode === 'user'
+                : (deviceId
+                    ? devices.find(d => d.deviceId === deviceId)?.label
+                        .toLowerCase().includes('front') ||
+                        devices.find(d => d.deviceId === deviceId)?.label
+                        .toLowerCase().includes('selfie')
+                    : true);
+
+            video.style.transform = isFrontCamera ? 'scaleX(-1)' : 'none';
+
+            video.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+
+            $('capture').disabled = false;
+
+            setStatus('Camera ready! Choose your layout and start capturing.');
+
+            setStep(1);
+
+        } catch (err) {
+
+            const messages = {
+                NotAllowedError: 'Camera permission denied. Allow camera access in your browser settings.',
+                NotFoundError: 'No camera was found on this device.',
+                NotReadableError: 'Your camera may be in use by another application.'
+            };
+
+            setStatus(messages[err.name] || 'Unable to start camera. Check your camera connection.');
+
+            video.classList.add('hidden');
+            placeholder.classList.remove('hidden');
+
+        }
+    }
+
+    function stopCamera() {
+
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+
+        video.srcObject = null;
+    }
+
+    $('startCamera').addEventListener('click', () => {
+        startCamera();
+    });
+
+    $('switchCamera').addEventListener('click', async () => {
+
+        await getDevices();
+
+        if (devices.length < 2) return;
+
+        const currentId = stream?.getVideoTracks()[0]?.getSettings().deviceId;
+        const currentIndex = devices.findIndex(d => d.deviceId === currentId);
+
+        activeDevice = (currentIndex + 1) % devices.length;
+
+        await startCamera(devices[activeDevice].deviceId);
+
+    });
+
+    $('clear').addEventListener('click', () => {
+
+        clearShots();
+        setStatus('Photos cleared.');
+
+    });
+
+    $('retake').addEventListener('click', () => {
+
+        clearShots();
+        setStatus('Ready for a new photo session.');
+        setStep(1);
+
+    });
+
+    function captureFrame() {
+
+        if (!video.videoWidth || !video.videoHeight) {
+            throw new Error('Camera is not ready yet.');
+        }
+
+        const canvas = document.createElement('canvas');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const ctx = canvas.getContext('2d');
+
+        if (isFrontCamera) {
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+        }
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        return new Promise(resolve => {
+
+            canvas.toBlob(blob => resolve(blob), 'image/jpeg', .94);
+
+        });
+
+    }
+
+    async function countdown(seconds) {
+
+        const el = $('countdown');
+
+        el.classList.remove('hidden');
+
+        for (let i = seconds; i > 0; i--) {
+
+            el.textContent = i;
+
+            await new Promise(resolve => setTimeout(resolve, 850));
+
+        }
+
+        el.textContent = '✦';
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+
+        el.classList.add('hidden');
+
+    }
+
+    $('capture').addEventListener('click', async () => {
+
+        if (busy || !stream) return;
+
+        busy = true;
+        $('capture').disabled = true;
+
+        clearShots();
+
+        const count = current().count;
+
+        setStep(2);
+
+        try {
+
+            for (let i = 0; i < count; i++) {
+
+                setStatus(`Get ready for photo ${i + 1} of ${count}...`);
+
+                await countdown(3);
+
+                const blob = await captureFrame();
+
+                if (!blob) {
+                    throw new Error('Could not save photo. Please try again.');
+                }
+
+                shots.push({
+                    blob,
+                    url: URL.createObjectURL(blob)
+                });
+
+                updateShots();
+
+                if (i < count - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 850));
+                }
+
+            }
+
+            setStatus('All photos captured! Generate your BSIS WEEK strip.');
+            setStep(3);
+
+        } catch (err) {
+
+            setStatus(err.message || 'Capture failed. Please try again.');
+
+        } finally {
+
+            busy = false;
+            $('capture').disabled = !stream;
+
+        }
+
+    });
+
+    function loadImage(url) {
+
+        return new Promise((resolve, reject) => {
+
+            const img = new Image();
+
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+            img.src = url;
+
+        });
+
+    }
+
+    function drawCover(ctx, img, x, y, w, h, filter) {
+
+        const scale = Math.max(w / img.width, h / img.height);
+
+        const sw = w / scale;
+        const sh = h / scale;
+
+        const sx = (img.width - sw) / 2;
+        const sy = (img.height - sh) / 2;
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.rect(x, y, w, h);
+        ctx.clip();
+
+        ctx.filter = filter || 'none';
+
+        ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+
+        ctx.restore();
+
+    }
+
+    /* BARCODE DECORATION */
+
+    function drawBarcode(ctx, x, y, w, h) {
+
+        ctx.save();
+
+        ctx.fillStyle = '#171113';
+
+        let pos = x;
+        let index = 0;
+
+        const widths = [2, 4, 2, 6, 3, 2, 5, 2, 3, 4, 2, 5];
+
+        while (pos < x + w) {
+
+            const barWidth = widths[index % widths.length];
+
+            ctx.fillRect(pos, y, barWidth, h);
+
+            pos += barWidth + (index % 3 === 0 ? 4 : 2);
+
+            index++;
+
+        }
+
+        ctx.restore();
+
+    }
+
+    /* BSIS WEEK DOUBLE PHOTO STRIP */
+
+    function drawBSISWeek(ctx, imgs, t, bg, filter) {
+
+        const W = t.w;
+        const H = t.h;
+
+        const outer = bg;
+
+        ctx.fillStyle = outer;
+        ctx.fillRect(0, 0, W, H);
+
+        const outerPad = 30;
+        const panelGap = 24;
+        const panelW = (W - outerPad * 2 - panelGap) / 2;
+        const panelH = H - outerPad * 2;
+
+        for (let panel = 0; panel < 2; panel++) {
+
+            const x = outerPad + panel * (panelW + panelGap);
+            const y = outerPad;
+
+            const light = bg === '#FFF9F4' || bg === '#FFFFFF';
+
+            const paper = light ? '#FFFFFF' : '#FFF9F4';
+            const ink = light ? '#40050B' : '#40050B';
+
+            /* WHITE PANEL */
+
+            ctx.fillStyle = paper;
+            ctx.fillRect(x, y, panelW, panelH);
+
+            /* PANEL BORDER */
+
+            ctx.strokeStyle = '#D9B56D';
+            ctx.lineWidth = 5;
+            ctx.strokeRect(x + 3, y + 3, panelW - 6, panelH - 6);
+
+            /* HEADER */
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            ctx.fillStyle = ink;
+            ctx.font = '900 33px Georgia, serif';
+
+            ctx.fillText('BSIS WEEK', x + panelW / 2, y + 52);
+
+            ctx.font = 'bold 13px system-ui';
+            ctx.fillText('CAPTURE • CREATE • CELEBRATE',
+                x + panelW / 2, y + 84);
+
+            /* TOP BARCODE */
+
+            drawBarcode(ctx, x + 45, y + 110, panelW - 90, 47);
+
+            /* DASHED DIVIDER */
+
+            ctx.strokeStyle = '#40050B';
+            ctx.lineWidth = 5;
+            ctx.setLineDash([17, 10]);
+
+            ctx.beginPath();
+            ctx.moveTo(x + 35, y + 179);
+            ctx.lineTo(x + panelW - 35, y + 179);
+            ctx.stroke();
+
+            ctx.setLineDash([]);
+
+            /* THREE PHOTOS PER PANEL */
+
+            const photoX = x + 37;
+            const photoW = panelW - 74;
+            const photoH = 382;
+            const photoGap = 24;
+            const photoStartY = y + 205;
+
+            for (let j = 0; j < 3; j++) {
+
+                const img = imgs[panel * 3 + j];
+
+                const py = photoStartY + j * (photoH + photoGap);
+
+                ctx.fillStyle = '#E8DADC';
+                ctx.fillRect(photoX - 7, py - 7, photoW + 14, photoH + 14);
+
+                ctx.strokeStyle = '#D7C4C8';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(photoX - 7, py - 7, photoW + 14, photoH + 14);
+
+                drawCover(ctx, img, photoX, py, photoW, photoH, filter);
+
+            }
+
+            /* BOTTOM DIVIDER */
+
+            const dividerY = photoStartY + 3 * photoH + 2 * photoGap + 20;
+
+            ctx.strokeStyle = '#40050B';
+            ctx.lineWidth = 5;
+            ctx.setLineDash([17, 10]);
+
+            ctx.beginPath();
+            ctx.moveTo(x + 35, dividerY);
+            ctx.lineTo(x + panelW - 35, dividerY);
+            ctx.stroke();
+
+            ctx.setLineDash([]);
+
+            /* FOOTER */
+
+            ctx.fillStyle = '#40050B';
+            ctx.font = '900 31px Georgia, serif';
+
+            ctx.fillText(
+                ($('caption').value || 'BSIS WEEK').toUpperCase(),
+                x + panelW / 2,
+                dividerY + 62,
+                panelW - 30
+            );
+
+            ctx.fillStyle = '#786D70';
+            ctx.font = 'bold 12px system-ui';
+
+            const footerText = $('eventDate').value.trim();
+
+            if (footerText) {
+                ctx.fillText(
+                    footerText.toUpperCase(),
+                    x + panelW / 2,
+                    dividerY + 95,
+                    panelW - 30
+                );
+            }
+
+            /* SMALL FOOTER BARCODE */
+
+            drawBarcode(
+                ctx,
+                x + 45,
+                dividerY + 116,
+                panelW - 90,
+                37
+            );
+
+            ctx.fillStyle = '#40050B';
+            ctx.font = 'bold 15px system-ui';
+            ctx.fillText('BSIS WEEK', x + panelW / 2, panelH + y - 21);
+
+        }
+
+    }
+
+    /* OTHER STRIP TEMPLATES */
+
+    function drawClassic(ctx, imgs, t, bg, filter) {
+
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, t.w, t.h);
+
+        const contentH = t.h - t.footer - t.pad * 2;
+
+        const cellW = (t.w - t.pad * 2 - t.gap * (t.cols - 1)) / t.cols;
+        const cellH = (contentH - t.gap * (t.rows - 1)) / t.rows;
+
+        imgs.forEach((img, i) => {
+
+            const col = i % t.cols;
+            const row = Math.floor(i / t.cols);
+
+            const x = t.pad + col * (cellW + t.gap);
+            const y = t.pad + row * (cellH + t.gap);
+
+            ctx.fillStyle = '#D9B56D';
+            ctx.fillRect(x - 6, y - 6, cellW + 12, cellH + 12);
+
+            drawCover(ctx, img, x, y, cellW, cellH, filter);
+
+        });
+
+        const light = bg === '#FFF9F4' || bg === '#FFFFFF';
+
+        ctx.fillStyle = light ? '#40050B' : '#FFF9F4';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.font = `900 ${Math.round(t.w * .045)}px Georgia, serif`;
+
+        ctx.fillText(
+            ($('caption').value || 'BSIS WEEK').toUpperCase(),
+            t.w / 2,
+            t.h - t.footer * .62,
+            t.w - t.pad * 2
+        );
+
+        ctx.fillStyle = light ? '#786D70' : '#F0DCE2';
+        ctx.font = `bold ${Math.round(t.w * .018)}px system-ui`;
+
+        const footer = $('eventDate').value.trim();
+
+        if (footer) {
+            ctx.fillText(
+                footer.toUpperCase(),
+                t.w / 2,
+                t.h - t.footer * .30,
+                t.w - t.pad * 2
+            );
+        }
+
+    }
+
+    async function makeStrip() {
+
+        const t = current();
+
+        if (shots.length < t.count) {
+
+            setStatus(`Capture ${t.count} photos for this layout first.`);
+            return;
+
+        }
+
+        setStatus('Generating your BSIS WEEK strip...');
+
+        const canvas = document.createElement('canvas');
+
+        canvas.width = t.w;
+        canvas.height = t.h;
+
+        const ctx = canvas.getContext('2d');
+
+        const bg = $('background').value;
+        const filter = $('filter').value;
+
+        const imgs = await Promise.all(
+            shots.slice(0, t.count).map(s => loadImage(s.url))
+        );
+
+        if ($('template').value === 'bsisweek') {
+
+            drawBSISWeek(ctx, imgs, t, bg, filter);
+
+        } else {
+
+            drawClassic(ctx, imgs, t, bg, filter);
+
+        }
+
+        generatedCanvas = canvas;
+        generated = true;
+
+        preview.width = t.w;
+        preview.height = t.h;
+
+        pctx.clearRect(0, 0, t.w, t.h);
+        pctx.drawImage(canvas, 0, 0);
+
+        $('dimensions').textContent =
+            `Export size: ${t.w} × ${t.h} px · Preview scales to fit your screen`;
+
+        $('downloadPng').disabled = false;
+        $('downloadJpg').disabled = false;
+
+        setStatus('Your BSIS WEEK photo strip is ready!');
+        setStep(4);
+
+    }
+
+    $('generate').addEventListener('click', async () => {
+
+        try {
+            await makeStrip();
+        } catch (err) {
+            setStatus('Could not generate the strip. ' + err.message);
+        }
+
+    });
+
+    function download(type) {
+
+        if (!generatedCanvas) return;
+
+        generatedCanvas.toBlob(blob => {
+
+            if (!blob) {
+                setStatus('Export failed. Please try again.');
+                return;
+            }
+
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+
+            a.href = url;
+            a.download = `BSIS-WEEK-${Date.now()}.${type === 'image/png' ? 'png' : 'jpg'}`;
+
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+        }, type, type === 'image/jpeg' ? .94 : undefined);
+
+    }
+
+    $('downloadPng').addEventListener('click', () => download('image/png'));
+    $('downloadJpg').addEventListener('click', () => download('image/jpeg'));
+
+    /* TEMPLATE CHANGES */
+
+    $('template').addEventListener('change', () => {
+
+        const t = current();
+
+        clearShots();
+        renderShotSlots();
+
+        preview.width = t.w;
+        preview.height = t.h;
+
+        pctx.fillStyle = '#F7F0F1';
+        pctx.fillRect(0, 0, t.w, t.h);
+
+        $('dimensions').textContent =
+            `Export size: ${t.w} × ${t.h} px · ${t.count} photos required`;
+
+        setStatus(
+            `Selected ${t.w} × ${t.h} px layout. Capture ${t.count} photos.`
+        );
+
+        setStep(1);
+
+    });
+
+    /* AUTOMATIC PREVIEW UPDATE */
+
+    ['background', 'filter', 'caption', 'eventDate'].forEach(id => {
+
+        $(id).addEventListener('change', () => {
+
+            if (generated && shots.length >= current().count) {
+                makeStrip().catch(() => {});
+            }
+
+        });
+
+    });
+
+    function initPreview() {
+
+        const t = current();
+
+        preview.width = t.w;
+        preview.height = t.h;
+
+        pctx.fillStyle = '#40050B';
+        pctx.fillRect(0, 0, t.w, t.h);
+
+        pctx.fillStyle = '#FFFFFF';
+        pctx.textAlign = 'center';
+        pctx.font = 'bold 55px Georgia';
+
+        pctx.fillText('BSIS WEEK', t.w / 2, t.h / 2);
+
+        pctx.font = 'bold 20px system-ui';
+        pctx.fillText('PHOTOBOOTH', t.w / 2, t.h / 2 + 55);
+
+    }
+
+    window.addEventListener('beforeunload', stopCamera);
+
+    initPreview();
+    renderShotSlots();
+
+})();
+</script>
+
+</body>
+</html>
